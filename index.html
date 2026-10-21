@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Maker Space</title>
+  <meta name="description" content="Maker Space: 3D printers, laser cutters, screen printing, wood and metal workshops. Book your time, read the guides, see finished projects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="Maker Space home"><span id="logoArt"></span>MAKER SPACE</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch theme" title="Switch theme"></button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav">
+      <a href="#home">Home</a>
+      <a href="#tools">Tools</a>
+      <a href="#guides">Guides</a>
+      <a href="#projects">Projects</a>
+      <a href="#book" class="only-mobile">Book</a>
+    </nav>
+    <a class="btn btn-green" href="#book">Book Your Time</a>
+  </div>
+</header>
+
+<main id="app">
+  <!-- HOME -->
+  <div class="route" data-route="home">
+    <div class="wrap">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <h1 id="heroTitle">Turn Your Ideas<br>Into Real Products</h1>
+          <p>3D printers, lasers, screen printing, wood and metal shops. Book an hour and leave with something you made.</p>
+          <div class="hero-actions">
+            <a class="btn btn-amber" href="#book">Start Creating Today</a>
+          </div>
+        </div>
+        <div class="cycle" id="cycle"><a class="btn btn-amber cycle-cta" href="#book">Start Creating Today</a></div>
+      </section>
+      <div class="stats" aria-label="Maker Space at a glance">
+        <div><b>5</b><span>workshops under one roof</span></div>
+        <div><b>$4</b><span>per hour, students</span></div>
+        <div><b>30 min</b><span>intro training per machine</span></div>
+        <div><b>Mon–Sat</b><span>10:00 AM – 6:00 PM</span></div>
+      </div>
+    </div>
+
+    <section class="band"><div class="wrap">
+      <h2 class="h2">Materials &amp; Tools</h2>
+      <div class="explorer" data-explorer="home"></div>
+    </div></section>
+
+    <section class="band" style="padding-top:0"><div class="wrap">
+      <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:28px">
+        <h2 class="h2" style="margin:0">Made at Maker Space</h2>
+        <a class="btn btn-ghost" href="#projects">All projects →</a>
+      </div>
+      <div class="grid-projects" id="featured"></div>
+    </div></section>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="route" data-route="tools" hidden>
+    <section class="band"><div class="wrap">
+      <p class="eyebrow">Equipment</p>
+      <h2 class="h2" style="margin-top:6px">Materials &amp; Tools</h2>
+      <p class="lead" style="margin:-12px 0 28px">Pick a workshop to see what you can make, what training you need, what it costs, and where to find step-by-step instructions.</p>
+      <div class="explorer" data-explorer="tools"></div>
+    </div></section>
+  </div>
+
+  <!-- GUIDES -->
+  <div class="route" data-route="guides" hidden>
+    <section class="band"><div class="wrap">
+      <p class="eyebrow">Instructions</p>
+      <h2 class="h2" style="margin-top:6px">Guides &amp; Tutorials</h2>
+      <p class="lead" style="margin:-12px 0 28px">Read the guide for your machine before your first session. Our staff run the intro training in person; these links help you prepare files and know what to expect.</p>
+      <div class="safety" style="margin-bottom:28px">
+        <h3 style="font-size:16px">Shop rules for every session</h3>
+        <ol>
+          <li>Check in at the front kiosk with the name you booked under.</li>
+          <li>Closed-toe shoes, hair tied back, no loose sleeves near moving parts.</li>
+          <li>Safety glasses on in the wood, metal and laser areas, always.</li>
+          <li>Use only machines you have completed the intro training for.</li>
+          <li>Clean your station and return tools 10 minutes before your slot ends.</li>
+        </ol>
+      </div>
+      <div class="guides" id="guidesGrid"></div>
+    </div></section>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="route" data-route="projects" hidden>
+    <section class="band"><div class="wrap">
+      <p class="eyebrow">Gallery</p>
+      <h2 class="h2" style="margin-top:6px">Finished Projects</h2>
+      <p class="example-note">Example projects showing what each workshop can produce, with time and material cost.</p>
+      <div class="filters" id="filters" role="group" aria-label="Filter by workshop"></div>
+      <div class="grid-projects" id="projectGrid"></div>
+    </div></section>
+  </div>
+
+  <!-- BOOK -->
+  <div class="route" data-route="book" hidden>
+    <section class="band"><div class="wrap">
+      <h2 class="h2">Book Your Time</h2>
+      <div class="book-grid">
+        <form id="bookForm" novalidate>
+          <div class="panel">
+            <div class="panel-h"><span class="num">1</span>Your Information</div>
+            <div class="fields">
+              <div class="field"><label for="fFirst">First name</label><input type="text" id="fFirst" autocomplete="given-name" required placeholder=" "></div>
+              <div class="field"><label for="fPhone">Phone</label><input type="tel" id="fPhone" autocomplete="tel" required placeholder=" " pattern="[0-9+()\-\s]{7,}"></div>
+              <div class="field"><label for="fLast">Last name</label><input type="text" id="fLast" autocomplete="family-name" required placeholder=" "></div>
+              <div class="field"><label for="fEmail">E-mail</label><input type="email" id="fEmail" autocomplete="email" required placeholder=" "></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-h"><span class="num">2</span>Choose equipment</div>
+            <div class="field" style="max-width:340px"><label for="fTool" class="sr">Workshop</label><select id="fTool"></select></div>
+            <label class="check"><input type="checkbox" id="fTraining"> <span>I haven't used this machine here before. Add the 30-minute intro training to my first slot (free).</span></label>
+          </div>
+          <div class="panel">
+            <div class="panel-h"><span class="num">3</span>Pick a time slot</div>
+            <div class="dates" id="dates" role="group" aria-label="Date"></div>
+            <div class="slots" id="slots" role="group" aria-label="Time slots"></div>
+            <div class="legend"><span><i style="background:var(--leaf)"></i>Free</span><span><i style="background:var(--amber)"></i>Selected</span><span><i style="background:var(--sunk);border:1px solid var(--line)"></i>Booked</span><span>Up to 4 slots (2 hours) per booking</span></div>
+          </div>
+        </form>
+        <aside class="panel summary" aria-live="polite">
+          <div class="stamp" id="stamp" aria-hidden="true">BOOKED</div>
+          <h3 style="font-size:16px">Your reservation</h3>
+          <dl id="sumList"></dl>
+          <div class="total"><span>Estimated</span><span id="sumTotal">$0</span></div>
+          <div id="formMsg" class="msg" hidden></div>
+          <button class="btn btn-amber" id="confirmBtn" type="submit" form="bookForm">Confirm reservation</button>
+          <p class="mode" id="modeNote"></p>
+          <div id="myWrap" hidden>
+            <h3 style="font-size:14px;margin:8px 0 10px">My bookings</h3>
+            <div class="mybook" id="myList"></div>
+          </div>
+        </aside>
+      </div>
+    </div></section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav aria-label="Social"><a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a><a href="https://www.whatsapp.com/" target="_blank" rel="noopener">WhatsApp</a></nav>
+    <address>Mon–Sat 10:00 AM – 6:00 PM · Sunday closed</address>
+    <nav aria-label="Footer"><a href="#guides">Guides</a><a href="#tools">Tools</a><a href="#projects">Projects</a></nav>
+  </div>
+</footer>
+
+<dialog id="projDlg" aria-labelledby="dlgTitle"><div id="dlgContent" style="position:relative"></div></dialog>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
