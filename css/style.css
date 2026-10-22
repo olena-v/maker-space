@@ -229,7 +229,6 @@ dialog::backdrop{background:rgba(20,22,12,.55)}
 .panel+.panel{margin-top:22px}
 .panel-h{display:flex;align-items:center;gap:12px;font:700 14px var(--f-display);margin-bottom:18px}
 .num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--olive);color:var(--olive-ink);font:700 13px var(--f-display);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
-.panel:nth-of-type(3) .num{background:var(--amber);color:var(--amber-ink)}
 .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media (max-width:560px){.fields{grid-template-columns:1fr}.panel{padding:20px 16px}}
 .field{display:grid;gap:4px}

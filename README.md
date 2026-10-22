@@ -43,6 +43,7 @@ To publish it, upload the folder to any static host such as GitHub Pages, Netlif
 
 ```
 ├── index.html      # page markup; sections switch via #home, #tools, #guides, #projects, #book
+├── favicon.svg     # tab icon: the gear logo (PNG copies for older browsers and iPhone home screens)
 ├── css/style.css   # styles, themes, responsive rules, animations
 └── js/app.js       # illustrations, workshop and project data, booking logic, effects
 ```

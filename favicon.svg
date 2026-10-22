@@ -1,0 +1,17 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round">
+  <!-- same gear-and-pencil mark as the site logo (ART.logo in js/app.js) -->
+  <circle cx="32" cy="32" r="22" fill="#8BA53A" stroke="#2C3A12" stroke-width="2"/>
+  <g fill="#8BA53A" stroke="#2C3A12" stroke-width="2">
+    <rect x="29" y="4" width="6" height="10" rx="1.5"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(45 32 32)"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(90 32 32)"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(135 32 32)"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(180 32 32)"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(225 32 32)"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(270 32 32)"/>
+    <rect x="29" y="4" width="6" height="10" rx="1.5" transform="rotate(315 32 32)"/>
+  </g>
+  <circle cx="32" cy="32" r="13" fill="#FFF7E3" stroke="#2C3A12" stroke-width="2"/>
+  <path d="M24 38l12-12 4 4-12 12h-4z" fill="#F2B33D" stroke="#2C3A12" stroke-width="2"/>
+  <path d="M36 26l3-3 4 4-3 3" fill="#3F6B1F" stroke="#2C3A12" stroke-width="2"/>
+</svg>
