@@ -60,20 +60,24 @@ p{margin:0}
 .btn-amber{background:var(--amber);color:var(--amber-ink);box-shadow:0 2px 0 rgba(0,0,0,.08)}
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
 .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
-.theme-btn{order:5;flex:none;width:40px;height:40px;display:grid;place-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:50%;color:var(--ink);font-size:18px;line-height:1;cursor:pointer;transition:transform .15s}
+.theme-btn{flex:none;width:40px;height:40px;display:grid;place-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:50%;color:var(--ink);font-size:18px;line-height:1;cursor:pointer;transition:transform .15s}
 .theme-btn:hover{transform:rotate(-12deg)}
 .menu-btn{display:none;background:none;border:1.5px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--ink);font:700 13px var(--f-display);cursor:pointer}
 @media (max-width:760px){
-  .top .wrap{flex-wrap:wrap;gap:12px}
-  .menu-btn{display:inline-block}
-  .theme-btn{order:0;margin-left:auto}
-  .theme-btn+.theme-btn{margin-left:0}
+  /* logo, theme, pause and Menu share one row down to 320px */
+  .top .wrap{flex-wrap:wrap;gap:8px}
+  .logo{font-size:16px;gap:8px}
+  .logo svg{width:34px;height:34px}
+  .theme-btn{width:36px;height:36px;font-size:16px}
+  /* row follows source order (logo, Menu, theme buttons) so Tab moves left to right; nav drops to its own row */
+  .menu-btn{display:inline-block;margin-left:auto}
   .nav .only-mobile{display:block}
   .top .btn-green{display:none}
-  .nav{display:none;width:100%;flex-direction:column;gap:4px;margin:0;padding-bottom:8px}
+  .nav{display:none;order:3;width:100%;flex-direction:column;gap:4px;margin:0;padding-bottom:8px}
   .nav.open{display:flex}
   .nav a{padding:10px 0;border-bottom:1px solid var(--line)}
 }
+@media (max-width:360px){.top .wrap{gap:6px}.logo{font-size:14px;gap:6px}}
 
 main{padding-bottom:64px}
 section.band{padding-block:56px}
@@ -94,7 +98,6 @@ section.band{padding-block:56px}
 @keyframes flow{to{stroke-dashoffset:-14}}
 .cycle-step{position:absolute;width:76px;height:76px;transform:translate(-50%,-50%);text-decoration:none;z-index:1}
 .cycle-step .ic{width:76px;height:76px;border-radius:50%;background:var(--ic-bg,var(--surface));display:grid;place-items:center;box-shadow:var(--ic-shadow,var(--shadow));border:3px solid var(--ic-ring,var(--bg));transition:transform .2s}
-.cycle-step:hover .ic{transform:scale(1.06) rotate(-3deg)}
 .cycle-step .ic svg{width:50px;height:50px}
 .cl{position:absolute;width:128px;font:700 12px/1.25 var(--f-display);text-align:center}
 .cl small{display:block;margin-top:4px;font:400 12px/1.35 var(--f-body);color:var(--muted)}
@@ -139,7 +142,7 @@ section.band{padding-block:56px}
 .tool-card-slot{min-width:0}
 .tool-tab{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:0;border-radius:4px;box-shadow:var(--shadow);font:700 13px var(--f-display);color:var(--ink);cursor:pointer;text-align:left;transition:background .15s,transform .15s}
 .tool-tab:hover{transform:translateX(3px)}
-.tool-tab[aria-selected="true"]{background:var(--leaf);color:var(--leaf-ink)}
+.tool-tab[aria-pressed="true"]{background:var(--leaf);color:var(--leaf-ink)}
 .tool-tab svg{width:30px;height:30px;flex:none}
 .tool-card{background:var(--surface);box-shadow:var(--shadow);border-radius:4px;padding:28px 32px 32px;min-width:0}
 .tool-card .tc-h{font-size:24px;margin-bottom:8px}

@@ -148,7 +148,8 @@ $('#logoArt').innerHTML=ART.logo;
   const seg=(a,b)=>{const dx=Math.sign(b[0]-a[0]),dy=Math.sign(b[1]-a[1]);return `<path class="flow" d="M${a[0]+dx*GAP} ${a[1]+dy*GAP}L${b[0]-dx*GAP} ${b[1]-dy*GAP}" marker-end="url(#tip)"/>`};
   const lines=[0,1,2].map(i=>seg(PTS[i],PTS[i+1])).join('');
   $('#cycle').insertAdjacentHTML('afterbegin',S(`0 0 ${VW} ${VH}`,`<defs><marker id="tip" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="tip" d="M0 0L10 5L0 10L3 5z"/></marker></defs>${lines}`).replace('<svg','<svg class="ring"')+
-    STEPS.map((s,i)=>`<a class="cycle-step s-${side[i]} r-${i<2?'top':'bottom'}" href="#${s[3]}" style="left:${(PTS[i][0]/VW*100).toFixed(2)}%;top:${(PTS[i][1]/VH*100).toFixed(2)}%"><span class="ic">${ART[s[0]]}${SPARK(i%2?'top:4px;left:2px':'top:2px;right:2px',i*.6)}</span><span class="cl"><span class="no">${i+1}</span><span class="full">${s[1]}<small>${s[2]}</small></span><span class="short">${s[4]}<small>${s[5]}</small></span></span></a>`).join(''));
+    // steps are an illustrated explainer, not navigation: read as a list, skipped by Tab
+    `<div role="list" aria-label="How it works">${STEPS.map((s,i)=>`<div class="cycle-step s-${side[i]} r-${i<2?'top':'bottom'}" role="listitem" style="left:${(PTS[i][0]/VW*100).toFixed(2)}%;top:${(PTS[i][1]/VH*100).toFixed(2)}%"><span class="ic">${ART[s[0]]}${SPARK(i%2?'top:4px;left:2px':'top:2px;right:2px',i*.6)}</span><span class="cl"><span class="no">${i+1}</span><span class="full">${s[1]}<small>${s[2]}</small></span><span class="short">${s[4]}<small>${s[5]}</small></span></span></div>`).join('')}</div>`);
 })();
 
 const guideLink=l=>`<a href="${l[2]}" target="_blank" rel="noopener">${esc(l[0])}<span>${l[1]} ↗<span class="sr"> (opens in new tab)</span></span></a>`;
@@ -177,7 +178,7 @@ function renderExplorers(){
   document.querySelectorAll('[data-explorer]').forEach(el=>{
     const ex=el.dataset.explorer;
     if(!el.querySelector('.tool-tabs')){
-      el.innerHTML=`<div class="tabs-wrap at-start"><button type="button" class="tabs-nav prev" aria-label="Previous workshops">‹</button><div class="tool-tabs" role="tablist" aria-label="Workshops">${TOOLS.map(t=>`<button type="button" class="tool-tab" role="tab" id="tab-${ex}-${t.id}" aria-controls="panel-${ex}" data-tool="${t.id}">${ART[t.icon]}${t.name}</button>`).join('')}</div><button type="button" class="tabs-nav next" aria-label="More workshops">›</button><div class="tab-dots" aria-hidden="true">${TOOLS.map(()=>'<i></i>').join('')}</div></div><div class="tool-card-slot" role="tabpanel" id="panel-${ex}"></div>`;
+      el.innerHTML=`<div class="tabs-wrap at-start"><button type="button" class="tabs-nav prev" aria-label="Previous workshops">‹</button><div class="tool-tabs" role="group" aria-label="Workshops">${TOOLS.map(t=>`<button type="button" class="tool-tab" aria-controls="panel-${ex}" data-tool="${t.id}">${ART[t.icon]}${t.name}</button>`).join('')}</div><button type="button" class="tabs-nav next" aria-label="More workshops">›</button><div class="tab-dots" aria-hidden="true">${TOOLS.map(()=>'<i></i>').join('')}</div></div><div class="tool-card-slot" id="panel-${ex}"></div>`;
       const wrap=el.querySelector('.tabs-wrap'),tabs=el.querySelector('.tool-tabs');
       const edges=()=>{wrap.classList.toggle('at-start',tabs.scrollLeft<4);wrap.classList.toggle('at-end',tabs.scrollLeft+tabs.clientWidth>=tabs.scrollWidth-4)};
       tabs.addEventListener('scroll',edges,{passive:true});addEventListener('resize',edges);
@@ -186,10 +187,10 @@ function renderExplorers(){
       requestAnimationFrame(edges);
     }
     const tabs=el.querySelector('.tool-tabs');let sel=null;
-    tabs.querySelectorAll('.tool-tab').forEach(b=>{const on=b.dataset.tool===activeTool;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;if(on)sel=b});
+    // plain buttons like the project filters: Tab reaches every workshop, aria-pressed marks the open one
+    tabs.querySelectorAll('.tool-tab').forEach(b=>{const on=b.dataset.tool===activeTool;b.setAttribute('aria-pressed',on);if(on)sel=b});
     el.querySelectorAll('.tab-dots i').forEach((d,i)=>d.classList.toggle('on',TOOLS[i].id===activeTool));
-    const panel=el.querySelector('.tool-card-slot');
-    panel.innerHTML=toolCard(TOOL[activeTool],ex==='home'?3:2);panel.setAttribute('aria-labelledby',sel.id);
+    el.querySelector('.tool-card-slot').innerHTML=toolCard(TOOL[activeTool],ex==='home'?3:2);
     if(sel&&tabs.scrollWidth>tabs.clientWidth) tabs.scrollTo({left:sel.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2,behavior:'smooth'});
   });
 }
@@ -198,14 +199,6 @@ document.addEventListener('click',e=>{
   const b=e.target.closest('[data-book]'); if(b){booking.tool=b.dataset.book;booking.slots=[];}
   const f=e.target.closest('[data-filter]'); if(f){projFilter=f.dataset.filter;renderProjects();}
   const p=e.target.closest('.pcard'); if(p) openProject(p.dataset.id);
-});
-// tabs pattern: arrow keys move between workshops, Tab jumps into the card
-document.addEventListener('keydown',e=>{
-  const tab=e.target.closest?.('.tool-tab'); if(!tab) return;
-  const list=[...tab.parentElement.children],i=list.indexOf(tab),step={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];
-  const n=e.key==='Home'?0:e.key==='End'?list.length-1:step?(i+step+list.length)%list.length:-1;
-  if(n<0) return;
-  e.preventDefault();activeTool=list[n].dataset.tool;store.set('ms-tool',activeTool);renderExplorers();list[n].focus();
 });
 
 function pcard(p,lv=2){return `<button class="pcard" data-id="${p.id}"><div class="art">${ART[p.art]}</div><div class="body"><span class="tag">${TOOL[p.tool].name}</span><h${lv} class="pc-h">${esc(p.title)}</h${lv}><p>${esc(p.desc)}</p><div class="pmeta"><span>${p.hours} h · ${p.level}</span><span>${esc(p.cost)}</span></div></div></button>`}
