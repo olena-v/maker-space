@@ -217,7 +217,7 @@ dialog::backdrop{background:rgba(20,22,12,.55)}
 .gcard{background:var(--surface);box-shadow:var(--shadow);border-radius:4px;padding:22px;display:grid;gap:14px;align-content:start}
 .gcard header{display:flex;align-items:center;gap:12px}
 .gcard header svg{width:40px;height:40px}
-.gcard h3{font-size:16px}
+.gcard h2{font-size:16px}
 .safety{background:var(--leaf);color:var(--leaf-ink);border-radius:6px;padding:22px 24px;display:grid;gap:10px}
 .safety ol{margin:0;padding-left:20px;display:grid;gap:4px}
 
