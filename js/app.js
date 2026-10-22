@@ -157,7 +157,7 @@ const guideLink=l=>`<a href="${l[2]}" target="_blank" rel="noopener">${esc(l[0])
 function toolCard(t,lv){
   const sub=`h${lv+1} class="tc-sub"`,end=`</h${lv+1}>`;
   return `<article class="tool-card">
-    <h${lv} class="tc-h">${t.name}</h${lv}>
+    <h${lv} class="tc-h" tabindex="-1">${t.name}</h${lv}>
     <div class="tool-art">${ART[t.scene]}${SPARK('top:6%;left:14%',0)}${SPARK('top:18%;right:12%',1.1)}${SPARK('bottom:16%;left:46%',.5)}</div>
     <div class="tool-meta"><span class="chip">$${t.rate} / hour</span><span class="chip">${esc(t.units)}</span><span class="chip">Training required</span></div>
     <div class="tool-body">
@@ -195,7 +195,11 @@ function renderExplorers(){
   });
 }
 document.addEventListener('click',e=>{
-  const tab=e.target.closest('.tool-tab'); if(tab){activeTool=tab.dataset.tool;store.set('ms-tool',activeTool);renderExplorers();return}
+  const tab=e.target.closest('.tool-tab'); if(tab){
+    activeTool=tab.dataset.tool;store.set('ms-tool',activeTool);renderExplorers();
+    // Space/Enter (a click with detail 0) takes keyboard users into the card they opened; mouse users stay put
+    if(!e.detail) tab.closest('[data-explorer]').querySelector('.tc-h').focus();
+    return}
   const b=e.target.closest('[data-book]'); if(b){booking.tool=b.dataset.book;booking.slots=[];}
   const f=e.target.closest('[data-filter]'); if(f){projFilter=f.dataset.filter;renderProjects();}
   const p=e.target.closest('.pcard'); if(p) openProject(p.dataset.id);

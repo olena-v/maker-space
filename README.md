@@ -21,7 +21,7 @@ The goal is to help creative people who have strong ideas but no access to expen
 - **Light and dark themes** with a manual switch.
 - **Responsive layout** for phone, tablet and desktop.
 - **Subtle motion.** Bobbing illustrations, twinkling sparkles and sections that fade in on scroll. All animation turns off when the system's reduced-motion setting is on, or with the pause button in the header.
-- **Accessibility (WCAG 2.2 AA).** Text and controls meet contrast minimums in both themes (white on green 4.7:1, focus ring 14.8:1 in light mode), every view has its own `h1` and page title, focus moves to the new view on navigation, Tab follows the visual order and skips the decorative step icons, every workshop button is reachable with Tab and announces which one is open, form errors are announced and linked to their fields, and the layout reflows at 320px without horizontal scrolling. Checked with axe-core.
+- **Accessibility (WCAG 2.2 AA).** Text and controls meet contrast minimums in both themes (white on green 4.7:1, focus ring 14.8:1 in light mode), every view has its own `h1` and page title, focus moves to the new view on navigation, Tab follows the visual order and skips the decorative step icons, every workshop button is reachable with Tab and announces which one is open (Space or Enter moves focus into that workshop's card), form errors are announced and linked to their fields, and the layout reflows at 320px without horizontal scrolling. Checked with axe-core.
 
 ## Tech
 

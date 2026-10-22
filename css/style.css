@@ -146,6 +146,7 @@ section.band{padding-block:56px}
 .tool-tab svg{width:30px;height:30px;flex:none}
 .tool-card{background:var(--surface);box-shadow:var(--shadow);border-radius:4px;padding:28px 32px 32px;min-width:0}
 .tool-card .tc-h{font-size:24px;margin-bottom:8px}
+.tool-card .tc-h:focus-visible{outline:3px solid var(--focus);outline-offset:4px}   /* shows where keyboard focus landed */
 .tool-art{display:grid;place-items:center;padding:12px 0 4px}
 .tool-art svg{width:min(100%,380px);height:auto}
 .tool-meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
