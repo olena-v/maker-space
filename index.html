@@ -16,6 +16,7 @@
   <div class="wrap">
     <a class="logo" href="#home" aria-label="Maker Space home"><span id="logoArt"></span>MAKER SPACE</a>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch theme" title="Switch theme"></button>
+    <button class="theme-btn" id="motionBtn" type="button" aria-pressed="false" aria-label="Pause animations" title="Pause animations"></button>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav">
       <a href="#home">Home</a>
@@ -34,7 +35,7 @@
     <div class="wrap">
       <section class="hero" aria-labelledby="heroTitle">
         <div class="hero-copy">
-          <h1 id="heroTitle">Turn Your Ideas<br>Into Real Products</h1>
+          <h1 id="heroTitle" tabindex="-1">Turn Your Ideas<br>Into Real Products</h1>
           <p>3D printers, lasers, screen printing, wood and metal shops. Book an hour and leave with something you made.</p>
           <div class="hero-actions">
             <a class="btn btn-amber" href="#book">Start Creating Today</a>
@@ -68,7 +69,7 @@
   <div class="route" data-route="tools" hidden>
     <section class="band"><div class="wrap">
       <p class="eyebrow">Equipment</p>
-      <h2 class="h2" style="margin-top:6px">Materials &amp; Tools</h2>
+      <h1 class="h2" tabindex="-1" style="margin-top:6px">Materials &amp; Tools</h1>
       <p class="lead" style="margin:-12px 0 28px">Pick a workshop to see what you can make, what training you need, what it costs, and where to find step-by-step instructions.</p>
       <div class="explorer" data-explorer="tools"></div>
     </div></section>
@@ -78,10 +79,10 @@
   <div class="route" data-route="guides" hidden>
     <section class="band"><div class="wrap">
       <p class="eyebrow">Instructions</p>
-      <h2 class="h2" style="margin-top:6px">Guides &amp; Tutorials</h2>
+      <h1 class="h2" tabindex="-1" style="margin-top:6px">Guides &amp; Tutorials</h1>
       <p class="lead" style="margin:-12px 0 28px">Read the guide for your machine before your first session. Our staff run the intro training in person; these links help you prepare files and know what to expect.</p>
       <div class="safety" style="margin-bottom:28px">
-        <h3 style="font-size:16px">Shop rules for every session</h3>
+        <h2 style="font-size:16px">Shop rules for every session</h2>
         <ol>
           <li>Check in at the front kiosk with the name you booked under.</li>
           <li>Closed-toe shoes, hair tied back, no loose sleeves near moving parts.</li>
@@ -98,7 +99,7 @@
   <div class="route" data-route="projects" hidden>
     <section class="band"><div class="wrap">
       <p class="eyebrow">Gallery</p>
-      <h2 class="h2" style="margin-top:6px">Finished Projects</h2>
+      <h1 class="h2" tabindex="-1" style="margin-top:6px">Finished Projects</h1>
       <p class="example-note">Example projects showing what each workshop can produce, with time and material cost.</p>
       <div class="filters" id="filters" role="group" aria-label="Filter by workshop"></div>
       <div class="grid-projects" id="projectGrid"></div>
@@ -108,11 +109,12 @@
   <!-- BOOK -->
   <div class="route" data-route="book" hidden>
     <section class="band"><div class="wrap">
-      <h2 class="h2">Book Your Time</h2>
+      <h1 class="h2" tabindex="-1">Book Your Time</h1>
       <div class="book-grid">
         <form id="bookForm" novalidate>
           <div class="panel">
             <div class="panel-h"><span class="num">1</span>Your Information</div>
+            <p class="hint">All fields are required so staff can reach you.</p>
             <div class="fields">
               <div class="field"><label for="fFirst">First name</label><input type="text" id="fFirst" autocomplete="given-name" required placeholder=" "></div>
               <div class="field"><label for="fPhone">Phone</label><input type="tel" id="fPhone" autocomplete="tel" required placeholder=" " pattern="[0-9+()\-\s]{7,}"></div>
@@ -132,19 +134,19 @@
             <div class="legend"><span><i style="background:var(--leaf)"></i>Free</span><span><i style="background:var(--amber)"></i>Selected</span><span><i style="background:var(--sunk);border:1px solid var(--line)"></i>Booked</span><span>Up to 4 slots (2 hours) per booking</span></div>
           </div>
         </form>
-        <aside class="panel summary" aria-live="polite">
+        <div class="panel summary">
           <div class="stamp" id="stamp" aria-hidden="true">BOOKED</div>
-          <h3 style="font-size:16px">Your reservation</h3>
+          <h2 style="font-size:16px">Your reservation</h2>
           <dl id="sumList"></dl>
           <div class="total"><span>Estimated</span><span id="sumTotal">$0</span></div>
-          <div id="formMsg" class="msg" hidden></div>
+          <div id="formMsg" class="msg" role="status"></div>
           <button class="btn btn-amber" id="confirmBtn" type="submit" form="bookForm">Confirm reservation</button>
           <p class="mode" id="modeNote"></p>
           <div id="myWrap" hidden>
             <h3 style="font-size:14px;margin:8px 0 10px">My bookings</h3>
             <div class="mybook" id="myList"></div>
           </div>
-        </aside>
+        </div>
       </div>
     </div></section>
   </div>
@@ -152,7 +154,7 @@
 
 <footer>
   <div class="wrap">
-    <nav aria-label="Social"><a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a><a href="https://www.whatsapp.com/" target="_blank" rel="noopener">WhatsApp</a></nav>
+    <nav aria-label="Social"><a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook<span class="sr"> (opens in new tab)</span></a><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram<span class="sr"> (opens in new tab)</span></a><a href="https://www.whatsapp.com/" target="_blank" rel="noopener">WhatsApp<span class="sr"> (opens in new tab)</span></a></nav>
     <address>Mon–Sat 10:00 AM – 6:00 PM · Sunday closed</address>
     <nav aria-label="Footer"><a href="#guides">Guides</a><a href="#tools">Tools</a><a href="#projects">Projects</a></nav>
   </div>

@@ -8,6 +8,14 @@
   mq.addEventListener?.('change',paint);
   paint();
 })();
+(()=>{
+  // WCAG 2.2.2: looping animations need an on-page way to stop them, not only the system setting
+  const r=document.documentElement,btn=document.getElementById('motionBtn');
+  let off=false;try{off=localStorage.getItem('ms-motion')==='off'}catch{}
+  const paint=()=>{r.classList.toggle('no-motion',off);btn.setAttribute('aria-pressed',off);btn.textContent=off?'▶︎':'⏸︎'};
+  btn.addEventListener('click',()=>{off=!off;try{localStorage.setItem('ms-motion',off?'off':'on')}catch{}paint()});
+  paint();
+})();
 /* ---------- illustrations (flat sticker style) ---------- */
 const G='#3F6B1F',L='#8BA53A',P='#CFDCA3',Y='#F2B33D',Y2='#FFD873',W='#FFFFFF',D='#2C3A12',C='#FFF7E3';
 const S=(vb,inner)=>`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" stroke-linejoin="round" stroke-linecap="round">${inner}</svg>`;
@@ -143,29 +151,33 @@ $('#logoArt').innerHTML=ART.logo;
     STEPS.map((s,i)=>`<a class="cycle-step s-${side[i]} r-${i<2?'top':'bottom'}" href="#${s[3]}" style="left:${(PTS[i][0]/VW*100).toFixed(2)}%;top:${(PTS[i][1]/VH*100).toFixed(2)}%"><span class="ic">${ART[s[0]]}${SPARK(i%2?'top:4px;left:2px':'top:2px;right:2px',i*.6)}</span><span class="cl"><span class="no">${i+1}</span><span class="full">${s[1]}<small>${s[2]}</small></span><span class="short">${s[4]}<small>${s[5]}</small></span></span></a>`).join(''));
 })();
 
-function toolCard(t){
-  return `<article class="tool-card" aria-live="polite">
-    <h3>${t.name}</h3>
+const guideLink=l=>`<a href="${l[2]}" target="_blank" rel="noopener">${esc(l[0])}<span>${l[1]} ↗<span class="sr"> (opens in new tab)</span></span></a>`;
+// lv: heading level of the card title (3 under a home-page h2, 2 directly under a view's h1)
+function toolCard(t,lv){
+  const sub=`h${lv+1} class="tc-sub"`,end=`</h${lv+1}>`;
+  return `<article class="tool-card">
+    <h${lv} class="tc-h">${t.name}</h${lv}>
     <div class="tool-art">${ART[t.scene]}${SPARK('top:6%;left:14%',0)}${SPARK('top:18%;right:12%',1.1)}${SPARK('bottom:16%;left:46%',.5)}</div>
     <div class="tool-meta"><span class="chip">$${t.rate} / hour</span><span class="chip">${esc(t.units)}</span><span class="chip">Training required</span></div>
     <div class="tool-body">
       <p>${esc(t.intro)}</p>
       <div class="two">
-        <div><h4>What you can make:</h4><ul>${t.make.map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>
-        <div><h4>Materials:</h4><ul>${t.materials.map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>
+        <div><${sub}>What you can make:${end}<ul>${t.make.map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>
+        <div><${sub}>Materials:${end}<ul>${t.materials.map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>
       </div>
-      <div><h4>Training:</h4><p>${esc(t.training)}</p></div>
-      <div><h4>Estimated Cost:</h4><p>${esc(t.cost)}</p></div>
-      <div><h4>How It Works</h4><ol>${t.how.map(m=>`<li>${esc(m)}</li>`).join('')}</ol></div>
-      <div><h4>Instructions &amp; tutorials</h4><div class="guide-links">${t.links.map(l=>`<a href="${l[2]}" target="_blank" rel="noopener">${esc(l[0])}<span>${l[1]} ↗</span></a>`).join('')}</div></div>
+      <div><${sub}>Training:${end}<p>${esc(t.training)}</p></div>
+      <div><${sub}>Estimated Cost:${end}<p>${esc(t.cost)}</p></div>
+      <div><${sub}>How It Works${end}<ol>${t.how.map(m=>`<li>${esc(m)}</li>`).join('')}</ol></div>
+      <div><${sub}>Instructions &amp; tutorials${end}<div class="guide-links">${t.links.map(guideLink).join('')}</div></div>
       <div class="tool-cta"><a class="btn btn-green" href="#book" data-book="${t.id}">Book Your Time</a><a class="btn btn-ghost" href="#projects" data-filter="${t.id}">See ${t.name.toLowerCase()} projects</a></div>
     </div></article>`;
 }
 let activeTool=store.get('ms-tool','screen'); if(!TOOL[activeTool]) activeTool='screen';
 function renderExplorers(){
   document.querySelectorAll('[data-explorer]').forEach(el=>{
+    const ex=el.dataset.explorer;
     if(!el.querySelector('.tool-tabs')){
-      el.innerHTML=`<div class="tabs-wrap at-start"><button type="button" class="tabs-nav prev" aria-label="Previous workshops">‹</button><div class="tool-tabs" role="tablist" aria-label="Workshops">${TOOLS.map(t=>`<button class="tool-tab" role="tab" data-tool="${t.id}">${ART[t.icon]}${t.name}</button>`).join('')}</div><button type="button" class="tabs-nav next" aria-label="More workshops">›</button><div class="tab-dots" aria-hidden="true">${TOOLS.map(()=>'<i></i>').join('')}</div></div><div class="tool-card-slot"></div>`;
+      el.innerHTML=`<div class="tabs-wrap at-start"><button type="button" class="tabs-nav prev" aria-label="Previous workshops">‹</button><div class="tool-tabs" role="tablist" aria-label="Workshops">${TOOLS.map(t=>`<button type="button" class="tool-tab" role="tab" id="tab-${ex}-${t.id}" aria-controls="panel-${ex}" data-tool="${t.id}">${ART[t.icon]}${t.name}</button>`).join('')}</div><button type="button" class="tabs-nav next" aria-label="More workshops">›</button><div class="tab-dots" aria-hidden="true">${TOOLS.map(()=>'<i></i>').join('')}</div></div><div class="tool-card-slot" role="tabpanel" id="panel-${ex}"></div>`;
       const wrap=el.querySelector('.tabs-wrap'),tabs=el.querySelector('.tool-tabs');
       const edges=()=>{wrap.classList.toggle('at-start',tabs.scrollLeft<4);wrap.classList.toggle('at-end',tabs.scrollLeft+tabs.clientWidth>=tabs.scrollWidth-4)};
       tabs.addEventListener('scroll',edges,{passive:true});addEventListener('resize',edges);
@@ -174,9 +186,10 @@ function renderExplorers(){
       requestAnimationFrame(edges);
     }
     const tabs=el.querySelector('.tool-tabs');let sel=null;
-    tabs.querySelectorAll('.tool-tab').forEach(b=>{const on=b.dataset.tool===activeTool;b.setAttribute('aria-selected',on);if(on)sel=b});
+    tabs.querySelectorAll('.tool-tab').forEach(b=>{const on=b.dataset.tool===activeTool;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;if(on)sel=b});
     el.querySelectorAll('.tab-dots i').forEach((d,i)=>d.classList.toggle('on',TOOLS[i].id===activeTool));
-    el.querySelector('.tool-card-slot').innerHTML=toolCard(TOOL[activeTool]);
+    const panel=el.querySelector('.tool-card-slot');
+    panel.innerHTML=toolCard(TOOL[activeTool],ex==='home'?3:2);panel.setAttribute('aria-labelledby',sel.id);
     if(sel&&tabs.scrollWidth>tabs.clientWidth) tabs.scrollTo({left:sel.offsetLeft-(tabs.clientWidth-sel.offsetWidth)/2,behavior:'smooth'});
   });
 }
@@ -186,14 +199,22 @@ document.addEventListener('click',e=>{
   const f=e.target.closest('[data-filter]'); if(f){projFilter=f.dataset.filter;renderProjects();}
   const p=e.target.closest('.pcard'); if(p) openProject(p.dataset.id);
 });
+// tabs pattern: arrow keys move between workshops, Tab jumps into the card
+document.addEventListener('keydown',e=>{
+  const tab=e.target.closest?.('.tool-tab'); if(!tab) return;
+  const list=[...tab.parentElement.children],i=list.indexOf(tab),step={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];
+  const n=e.key==='Home'?0:e.key==='End'?list.length-1:step?(i+step+list.length)%list.length:-1;
+  if(n<0) return;
+  e.preventDefault();activeTool=list[n].dataset.tool;store.set('ms-tool',activeTool);renderExplorers();list[n].focus();
+});
 
-function pcard(p){return `<button class="pcard" data-id="${p.id}"><div class="art">${ART[p.art]}</div><div class="body"><span class="tag">${TOOL[p.tool].name}</span><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p><div class="pmeta"><span>${p.hours} h · ${p.level}</span><span>${esc(p.cost)}</span></div></div></button>`}
-$('#featured').innerHTML=['trophy','hoodie','lamp'].map(id=>pcard(PROJECTS.find(p=>p.id===id))).join('');
+function pcard(p,lv=2){return `<button class="pcard" data-id="${p.id}"><div class="art">${ART[p.art]}</div><div class="body"><span class="tag">${TOOL[p.tool].name}</span><h${lv} class="pc-h">${esc(p.title)}</h${lv}><p>${esc(p.desc)}</p><div class="pmeta"><span>${p.hours} h · ${p.level}</span><span>${esc(p.cost)}</span></div></div></button>`}
+$('#featured').innerHTML=['trophy','hoodie','lamp'].map(id=>pcard(PROJECTS.find(p=>p.id===id),3)).join('');
 let projFilter='all';
 function renderProjects(){
   $('#filters').innerHTML=[['all','All'],...TOOLS.map(t=>[t.id,t.name])].map(([id,n])=>`<button class="filter" aria-pressed="${projFilter===id}" data-f="${id}">${n}</button>`).join('');
   const list=PROJECTS.filter(p=>projFilter==='all'||p.tool===projFilter);
-  $('#projectGrid').innerHTML=list.length?list.map(pcard).join(''):'<p class="lead">No projects yet for this workshop.</p>';
+  $('#projectGrid').innerHTML=list.length?list.map(p=>pcard(p)).join(''):'<p class="lead">No projects yet for this workshop.</p>';
 }
 $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b){projFilter=b.dataset.f;renderProjects()}});
 function openProject(id){
@@ -201,14 +222,14 @@ function openProject(id){
   $('#dlgContent').innerHTML=`<button class="dlg-close" aria-label="Close" onclick="projDlg.close()">×</button><div class="dlg-art">${ART[p.art]}</div><div class="dlg-body"><span class="tag">${t.name} · ${p.level}</span><h3 id="dlgTitle" style="font-size:22px">${esc(p.title)}</h3><p>${esc(p.desc)}</p><div class="tool-meta" style="margin:0"><span class="chip">${p.hours} hours</span><span class="chip">${esc(p.cost)} materials</span><span class="chip">${esc(p.by)}</span></div><div><h4 style="font-size:15px;margin-bottom:8px">How it was made</h4><ol>${p.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div><div class="tool-cta"><a class="btn btn-green" href="#book" data-book="${t.id}" onclick="projDlg.close()">Book the ${t.name.toLowerCase()}</a><a class="btn btn-ghost" href="#tools" onclick="projDlg.close();activeTool='${t.id}';renderExplorers()">Read the guide</a></div></div>`;
   projDlg.showModal();
 }
-$('#guidesGrid').innerHTML=TOOLS.map(t=>`<article class="gcard"><header>${ART[t.icon]}<h3>${t.name}</h3></header><p style="color:var(--muted);font-size:14px">${esc(t.training)}</p><div class="guide-links">${t.links.map(l=>`<a href="${l[2]}" target="_blank" rel="noopener">${esc(l[0])}<span>${l[1]} ↗</span></a>`).join('')}</div><a href="#tools" style="font-size:14px" onclick="activeTool='${t.id}';renderExplorers()">Full station guide →</a></article>`).join('');
+$('#guidesGrid').innerHTML=TOOLS.map(t=>`<article class="gcard"><header>${ART[t.icon]}<h3>${t.name}</h3></header><p style="color:var(--muted);font-size:14px">${esc(t.training)}</p><div class="guide-links">${t.links.map(guideLink).join('')}</div><a href="#tools" style="font-size:14px" onclick="activeTool='${t.id}';renderExplorers()">Full station guide →</a></article>`).join('');
 
 /* ---------- router ---------- */
 const ROUTES=['home','tools','guides','projects','book'];
 const RV_SEL='.band .h2,.band .lead,.explorer,.stats,.safety,.pcard,.gcard,.filters,.book-grid';
 const rvIO=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in');rvIO.unobserve(el);setTimeout(()=>{el.classList.remove('pre','in');el.style.transitionDelay=''},1200)}),{rootMargin:'0px 0px -6% 0px'}):null;
 function prepReveal(root){
-  if(!rvIO||!root||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(!rvIO||!root||matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.classList.contains('no-motion'))return;
   root.querySelectorAll(RV_SEL).forEach(el=>{
     if(el.dataset.rv)return;const r=el.getBoundingClientRect();
     if(!r.height||r.top<innerHeight*.9)return;
@@ -217,9 +238,13 @@ function prepReveal(root){
     el.classList.add('pre');rvIO.observe(el);
   });
 }
-function route(){
+function route(e){
   const r=ROUTES.includes(location.hash.slice(1))?location.hash.slice(1):'home';
   document.querySelectorAll('[data-route]').forEach(el=>el.hidden=el.dataset.route!==r);
+  const h1=document.querySelector(`[data-route="${r}"] h1`);
+  document.title=r==='home'?'Maker Space':`${h1.textContent} · Maker Space`;
+  // on navigation (not first load) move focus to the new view's heading so screen readers announce it
+  if(e) h1.focus({preventScroll:true});
   document.querySelectorAll('.nav a').forEach(a=>{if(a.getAttribute('href')==='#'+r)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
   $('#nav').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');
   if(r==='book') renderBooking();
@@ -266,7 +291,7 @@ $('#slots').addEventListener('click',e=>{
   else booking.slots=[...booking.slots,t].sort();
   msg('');renderBooking();
 });
-['fFirst','fLast','fPhone','fEmail'].forEach(id=>{const el=$('#'+id);const d=store.get('ms-draft',{});if(d[id])el.value=d[id];el.addEventListener('input',()=>{const x=store.get('ms-draft',{});x[id]=el.value;store.set('ms-draft',x)})});
+['fFirst','fLast','fPhone','fEmail'].forEach(id=>{const el=$('#'+id);const d=store.get('ms-draft',{});if(d[id])el.value=d[id];el.addEventListener('input',()=>{const x=store.get('ms-draft',{});x[id]=el.value;store.set('ms-draft',x);if(el.getAttribute('aria-invalid')==='true'&&el.checkValidity()){el.setAttribute('aria-invalid','false');el.removeAttribute('aria-describedby')}})});
 
 function isTaken(time){
   const id=slotId(booking.date,booking.tool,time);
@@ -302,13 +327,15 @@ $('#myList').addEventListener('click',async e=>{
   if(shared){const bk=mine.find(x=>x.id===id);try{for(const t of bk.times)await db.collection('slots').doc(slotId(bk.date,bk.tool,t)).delete();await db.collection('data/users/'+uid).doc(id).delete();msg('Booking cancelled.','ok')}catch{msg('Could not cancel right now. Try again in a moment.','err');b.disabled=false}}
   else{store.set('ms-bookings',store.get('ms-bookings',[]).filter(x=>x.id!==id));msg('Booking cancelled.','ok');renderBooking()}
 });
-function msg(text,kind){const m=$('#formMsg');m.hidden=!text;m.textContent=text;m.className='msg'+(kind?' '+kind:'')}
+function msg(text,kind){const m=$('#formMsg');m.textContent=text;m.className='msg'+(kind?' '+kind:'')}
 
 $('#bookForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const f={first:$('#fFirst').value.trim(),last:$('#fLast').value.trim(),phone:$('#fPhone').value.trim(),email:$('#fEmail').value.trim()};
-  const bad=['fFirst','fLast','fPhone','fEmail'].find(id=>!$('#'+id).checkValidity());
-  if(bad){$('#'+bad).focus();$('#'+bad).placeholder='';return msg('Fill in your name, a phone number and a valid e-mail so staff can reach you.','err')}
+  const ids=['fFirst','fLast','fPhone','fEmail'];
+  ids.forEach(id=>{const el=$('#'+id),ok=el.checkValidity();el.setAttribute('aria-invalid',!ok);if(ok)el.removeAttribute('aria-describedby');else{el.setAttribute('aria-describedby','formMsg');el.placeholder=''}});
+  const bad=ids.find(id=>!$('#'+id).checkValidity());
+  if(bad){msg('Fill in your name, a phone number and a valid e-mail so staff can reach you.','err');$('#'+bad).focus();return}
   if(!booking.slots.length) return msg('Pick at least one time slot.','err');
   const rec={tool:booking.tool,date:booking.date,times:[...booking.slots],training:$('#fTraining').checked,...f,createdAt:Date.now()};
   const id=slotId(rec.date,rec.tool,rec.times[0]);
